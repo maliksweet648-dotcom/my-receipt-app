@@ -1,34 +1,38 @@
 import streamlit as st
 import pandas as pd
 
-st.title("Global Receipt Generator")
+st.set_page_config(page_title="MTT Global Receipt Generator", layout="centered")
 
-# 1. Excel/CSV Upload Feature
-st.subheader("Upload Rate List (Optional)")
-uploaded_file = st.file_uploader("Upload your item list (Excel or CSV)", type=['csv', 'xlsx'])
+# Theme Control
+theme = st.sidebar.radio("Theme", ["Light", "Dark"])
+if theme == "Dark":
+    st.markdown("<style>.stApp {background-color: #121212; color: white;}</style>", unsafe_allow_html=True)
 
-# 2. Global Currencies List
-currencies = [
-    "SAR (Saudi Riyal)", "PKR (Pakistani Rupee)", "USD (US Dollar)", 
-    "EUR (Euro)", "GBP (British Pound)", "CNY (Chinese Yuan)", 
-    "AED (UAE Dirham)", "INR (Indian Rupee)", "TRY (Turkish Lira)", 
-    "JPY (Japanese Yen)", "CAD (Canadian Dollar)", "AUD (Australian Dollar)"
-]
+st.title("MTT Global Receipt Generator")
 
-# Inputs
-shop_name = st.text_input("Shop Name / 店铺名称")
-customer_name = st.text_input("Customer Name / 客户姓名")
-item = st.text_input("Item Name / 商品名称")
-price = st.number_input("Price / 价格", min_value=0.0)
-currency = st.selectbox("Select Currency / 选择货币", currencies)
+# Logo Handling
+uploaded_logo = st.file_uploader("Upload your Shop Logo (Optional)", type=['png', 'jpg', 'jpeg'])
+if uploaded_logo:
+    st.image(uploaded_logo, width=100)
+else:
+    try:
+        st.image("logo.png", width=100) # Default logo
+    except:
+        st.write("No logo found.")
 
-if st.button("Generate Receipt / 生成收据"):
+# Shop Details
+shop_name = st.text_input("Enter Shop Name")
+currency = st.selectbox("Currency", ["USD ($)", "SAR (ر.س)", "PKR (Rs)", "AED (د.إ)"])
+item = st.text_input("Item Name")
+price = st.number_input("Price", min_value=0.0)
+
+if st.button("Generate Receipt"):
     receipt = f"""
-    --- RECEIPT / 收据 ---
-    Shop: {shop_name}
-    Customer: {customer_name}
+    --- RECEIPT ---
+    Shop: {shop_name if shop_name else "Generic Shop"}
     Item: {item}
     Price: {price} {currency}
-    --- Thank You / 谢谢 ---
+    ----------------
+    Powered by MTT Global
     """
     st.text(receipt)
