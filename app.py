@@ -49,5 +49,4 @@ price = st.number_input("Price", min_value=0.0)
 if st.button("Generate Receipt"):
     st.success(f"Receipt for {shop_name if shop_name else 'Your Shop'}")
     st.write(f"**Item:** {item}")
-    st.write(f"**Total:** {price} {currency}")    """
-    st.text(receipt)
+    st.write(f"**Total:** {price} {currency}")
